@@ -59,6 +59,9 @@ async fn main() {
         .route("/api/relationships", post(memories::create_relationship).get(memories::get_relationships))
         // Serve static uploads
         .nest_service("/uploads", ServeDir::new(upload_dir))
+        .fallback_service(
+            ServeDir::new("./dist").fallback(tower_http::services::ServeFile::new("./dist/index.html"))
+        )
         .layer(cors)
         .with_state(pool);
 
