@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Upload, FileText, Camera, Music, Sparkles, UserPlus, CheckCircle2 } from 'lucide-react';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../firebase';
 import { API_URL } from '../config';
 
 export default function UploadMemory({ token, onUploadSuccess }) {
@@ -71,18 +73,29 @@ export default function UploadMemory({ token, onUploadSuccess }) {
     setLoading(true);
     setError('');
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('category', category);
-    formData.append('media_type', mediaType);
-    formData.append('event_date', eventDate);
-    if (file) {
-      formData.append('file', file);
-    }
-    formData.append('linked_members', selectedMembers.join(','));
-
     try {
+      let firebaseMediaUrl = null;
+      if (file) {
+        // Upload file to Firebase Storage
+        const fileExtension = file.name.split('.').pop();
+        const uniqueFileName = `${Date.now()}_${Math.random().toString(36).substring(2, 11)}.${fileExtension}`;
+        const storageRef = ref(storage, `memories/${uniqueFileName}`);
+        
+        const snapshot = await uploadBytes(storageRef, file);
+        firebaseMediaUrl = await getDownloadURL(snapshot.ref);
+      }
+
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('category', category);
+      formData.append('media_type', mediaType);
+      formData.append('event_date', eventDate);
+      if (firebaseMediaUrl) {
+        formData.append('media_url', firebaseMediaUrl);
+      }
+      formData.append('linked_members', selectedMembers.join(','));
+
       await axios.post(`${API_URL}/api/memories`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

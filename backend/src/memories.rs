@@ -9,7 +9,6 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sqlx::SqlitePool;
 use std::path::Path;
-use std::time::Duration;
 use uuid::Uuid;
 
 use crate::ai::AIService;
@@ -166,6 +165,13 @@ pub async fn upload_memory(
                             .map(|s| s.trim().to_string())
                             .filter(|s| !s.is_empty())
                             .collect();
+                    }
+                }
+            }
+            "media_url" => {
+                if let Ok(text) = field.text().await {
+                    if !text.is_empty() {
+                        media_url = Some(text);
                     }
                 }
             }
