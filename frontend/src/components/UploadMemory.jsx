@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Upload, FileText, Camera, Music, Sparkles, UserPlus, CheckCircle2 } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function UploadMemory({ token, onUploadSuccess }) {
   const [title, setTitle] = useState('');
@@ -24,7 +25,7 @@ export default function UploadMemory({ token, onUploadSuccess }) {
 
   const fetchFamilyMembers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/family-members');
+      const res = await axios.get(`${API_URL}/api/family-members`);
       setFamilyMembers(res.data);
     } catch (err) {
       console.error('Error fetching family members:', err);
@@ -82,7 +83,7 @@ export default function UploadMemory({ token, onUploadSuccess }) {
     formData.append('linked_members', selectedMembers.join(','));
 
     try {
-      await axios.post('http://localhost:5000/api/memories', formData, {
+      await axios.post(`${API_URL}/api/memories`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`

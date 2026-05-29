@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { LogIn, UserPlus, Shield, Heart } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function Login({ onAuthSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -16,7 +17,7 @@ export default function Login({ onAuthSuccess }) {
     setError('');
     setLoading(true);
 
-    const baseUrl = 'http://localhost:5000/api';
+    const baseUrl = `${API_URL}/api`;
 
     try {
       if (isLogin) {

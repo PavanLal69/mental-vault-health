@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { UserPlus, Link, User, ShieldAlert, Heart, Calendar, FileText, CheckCircle2 } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function FamilyTree({ token }) {
   const [members, setMembers] = useState([]);
@@ -35,8 +36,8 @@ export default function FamilyTree({ token }) {
 
   const fetchTreeData = async () => {
     try {
-      const resMembers = await axios.get('http://localhost:5000/api/family-members');
-      const resRels = await axios.get('http://localhost:5000/api/relationships');
+      const resMembers = await axios.get(`${API_URL}/api/family-members`);
+      const resRels = await axios.get(`${API_URL}/api/relationships`);
       setMembers(resMembers.data);
       setRelationships(resRels.data);
       
@@ -56,7 +57,7 @@ export default function FamilyTree({ token }) {
     setSelectedMember(member);
     // Fetch memories linked to this family member
     try {
-      const res = await axios.get('http://localhost:5000/api/memories');
+      const res = await axios.get(`${API_URL}/api/memories`);
       // For MVP, filter memories that link to this member
       // The backend memory schema has an optional link logic, 
       // we fetch all memories and filter client-side, or we can queries.
@@ -90,7 +91,7 @@ export default function FamilyTree({ token }) {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/family-members', {
+      await axios.post(`${API_URL}/api/family-members`, {
         name,
         relation,
         birth_date: birthDate,
@@ -122,7 +123,7 @@ export default function FamilyTree({ token }) {
     if (!memberA || !memberB || memberA === memberB) return;
 
     try {
-      await axios.post('http://localhost:5000/api/relationships', {
+      await axios.post(`${API_URL}/api/relationships`, {
         member_a_id: memberA,
         member_b_id: memberB,
         relation_type: relType

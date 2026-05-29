@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Search, Heart, Sparkles, Volume2, Calendar, FileText, X, Image, VolumeX } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function MemoryFeed({ role }) {
   const [memories, setMemories] = useState([]);
@@ -21,7 +22,7 @@ export default function MemoryFeed({ role }) {
   const fetchMemories = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/memories');
+      const res = await axios.get(`${API_URL}/api/memories`);
       setMemories(res.data);
     } catch (err) {
       console.error('Error fetching memories:', err);
@@ -32,7 +33,7 @@ export default function MemoryFeed({ role }) {
 
   const fetchDailyMemory = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/memories/daily');
+      const res = await axios.get(`${API_URL}/api/memories/daily`);
       setDailyMemory(res.data);
     } catch (err) {
       console.error('Error fetching daily memory:', err);
@@ -47,7 +48,7 @@ export default function MemoryFeed({ role }) {
     }
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/memories/search?q=${encodeURIComponent(searchQuery)}`);
+      const res = await axios.get(`${API_URL}/api/memories/search?q=${encodeURIComponent(searchQuery)}`);
       setMemories(res.data);
     } catch (err) {
       console.error('Error performing semantic search:', err);
@@ -84,7 +85,7 @@ export default function MemoryFeed({ role }) {
   const getFullMediaUrl = (url) => {
     if (!url) return '';
     if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    return `http://localhost:5000${url}`;
+    return `${API_URL}${url}`;
   };
 
   return (

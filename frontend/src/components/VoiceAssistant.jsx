@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Mic, MicOff, Volume2, VolumeX, Sparkles, Heart } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function VoiceAssistant() {
   const [isListening, setIsListening] = useState(false);
@@ -69,7 +70,7 @@ export default function VoiceAssistant() {
   const sendVoiceQuery = async (queryText) => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/voice/query?q=${encodeURIComponent(queryText)}`);
+      const res = await axios.get(`${API_URL}/api/voice/query?q=${encodeURIComponent(queryText)}`);
       const response = res.data.response;
       setAiResponse(response);
       speakResponse(response);
