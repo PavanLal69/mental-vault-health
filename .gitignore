@@ -1,0 +1,25 @@
+# Rust / Cargo build outputs
+backend/target/
+backend/target_custom/
+backend/Cargo.lock
+
+# Node / NPM packages and builds
+frontend/node_modules/
+frontend/dist/
+frontend/npm-debug.log*
+
+# Database files
+backend/memory_vault.db
+backend/memory_vault.db-journal
+
+# File Uploads storage (keep the directory but ignore files)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Environment variables & API Keys (CRITICAL: Do not upload credentials!)
+backend/.env
+.env
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,6 @@
+[build]
+incremental = false
+
+[profile.dev]
+incremental = false
+split-debuginfo = "unpacked"
